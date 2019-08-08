@@ -141,6 +141,11 @@
 			</div>
 			{{/if}}
 
+            <fieldset>
+                <!-- <legend style="margin-bottom: 2.5rem;">Custom Fields</legend> -->
+                {{> customFieldsForm hideFromForm=false formData=customField new=true}}
+            </fieldset>
+
 			<label for="roles">{{_ "Roles"}}</label>
 			<div class="rc-form-group rc-form-group--small">
 				<ul id="roles" class="chip-container current-user-roles">

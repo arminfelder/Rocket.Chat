@@ -199,6 +199,10 @@ export const saveUser = function(userId, userData) {
 			updateUser.$set['emails.0.verified'] = userData.verified;
 		}
 
+		if (typeof userData.customFields === 'object') {
+			updateUser.$set.customFields = userData.customFields;
+		}
+
 		Meteor.users.update({ _id }, updateUser);
 
 		if (userData.sendWelcomeEmail) {
@@ -289,6 +293,10 @@ export const saveUser = function(userId, userData) {
 
 	if (typeof userData.verified === 'boolean') {
 		updateUser.$set['emails.0.verified'] = userData.verified;
+	}
+
+	if (typeof userData.customFields === 'object') {
+		updateUser.$set.customFields = userData.customFields;
 	}
 
 	Meteor.users.update({ _id: userData._id }, updateUser);

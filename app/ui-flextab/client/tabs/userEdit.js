@@ -6,12 +6,13 @@ import { TAPi18n } from 'meteor/tap:i18n';
 import toastr from 'toastr';
 import s from 'underscore.string';
 
-import { t, handleError } from '../../../utils';
+import { t, handleError, templateVarHandler } from '../../../utils';
 import { Roles } from '../../../models';
 import { Notifications } from '../../../notifications';
 import { hasAtLeastOnePermission } from '../../../authorization';
 import { settings } from '../../../settings';
 import { callbacks } from '../../../callbacks';
+import _ from 'underscore';
 
 Template.userEdit.helpers({
 
@@ -54,6 +55,19 @@ Template.userEdit.helpers({
 
 	name() {
 		return this.description || this._id;
+	},
+	customField() {
+		const customFields = [];
+
+		const { user } = Template.instance();
+
+		const userCustomFields = (user && user.customFields) || {};
+
+		_.map(userCustomFields, (value, label) => {
+			customFields[label] = value;
+		});
+
+		return customFields;
 	},
 });
 
@@ -189,6 +203,11 @@ Template.userEdit.onCreated(function() {
 		userData.requirePasswordChange = this.$('#changePassword:checked').length > 0;
 		userData.joinDefaultChannels = this.$('#joinDefaultChannels:checked').length > 0;
 		userData.sendWelcomeEmail = this.$('#sendWelcomeEmail:checked').length > 0;
+		userData.customFields = {};
+		$('[data-customfield=true]').each(function() {
+			userData.customFields[this.name] = $(this).val() || '';
+		});
+
 		const roleSelect = this.$('.remove-role').toArray();
 
 		if (roleSelect.length > 0) {
