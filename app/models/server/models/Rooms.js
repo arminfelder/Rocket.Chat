@@ -438,8 +438,9 @@ export class Rooms extends Base {
 		return this._db.find(query, options);
 	}
 
+	//TODO: clean fix, modified by Armin Felder to prevent having inavlid lastmessage object
 	setReactionsInLastMessage(roomId, lastMessage) {
-		return this.update({ _id: roomId }, { $set: { 'lastMessage.reactions': lastMessage.reactions } });
+		return this.update({ _id: roomId }, { $set: { 'lastMessage': lastMessage } });
 	}
 
 	unsetReactionsInLastMessage(roomId) {
